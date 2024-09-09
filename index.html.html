@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erigo Member Group</title>
+    <style>
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background-color: #000; /* Latar belakang hitam */
+            padding: 10px;
+            margin: 0;
+            color: #fff; /* Teks putih */
+        }
+        h1 {
+            text-align: center;
+            color: #fff; /* Warna font putih */
+            font-size: 2em;
+            letter-spacing: 2px;
+        }
+        form {
+            background-color: #333; /* Latar belakang form abu-abu gelap */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        input[type="text"], input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #555; /* Latar belakang input abu-abu */
+            color: #fff; /* Warna teks input putih */
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #F1C40F; /* Warna kuning cerah */
+            color: #000; /* Warna teks hitam */
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        input[type="submit"]:hover {
+            background-color: #F39C12; /* Warna kuning gelap saat di-hover */
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #222; /* Latar belakang abu-abu sangat gelap */
+            padding: 15px;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .whatsapp-link {
+            color: #25d366;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .group-invitation {
+            margin-top: 20px;
+            background-color: #e8f5e9;
+            padding: 10px;
+            border: 1px solid #F1C40F;
+            border-radius: 5px;
+            color: #000;
+        }
+        .group-invitation a {
+            color: #F1C40F; /* Warna kuning dari tombol */
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* Responsif styling untuk mobile */
+        @media screen and (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            form {
+                padding: 10px;
+            }
+            input[type="text"], input[type="tel"], input[type="submit"] {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ERIGO MEMBER GROUP</h1>
+
+    <form id="memberForm">
+        <label for="name">Nama Customer:</label>
+        <input type="text" id="name" name="name" placeholder="Masukkan nama" required>
+
+        <label for="phone">No Handphone:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Masukkan no handphone" required>
+
+        <input type="submit" value="Input">
+    </form>
+
+    <div class="result" id="result"></div>
+    <div class="group-invitation" id="groupInvitation" style="display: none;">
+        <p>Terima kasih telah bergabung! Klik link di bawah untuk bergabung dengan grup WhatsApp:</p>
+        <a href="https://chat.whatsapp.com/J7ZBtvIACZEChNxRvGRVqC" target="_blank">Bergabung di Grup WhatsApp Erigo Member</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('memberForm');
+        const resultDiv = document.getElementById('result');
+        const groupInvitationDiv = document.getElementById('groupInvitation');
+
+        // Fungsi untuk menyimpan data ke local storage
+        function saveData(name, phone) {
+            let customers = JSON.parse(localStorage.getItem('customers')) || [];
+            customers.push({ name, phone });
+            localStorage.setItem('customers', JSON.stringify(customers));
+        }
+
+        // Fungsi untuk memuat data yang sudah tersimpan di local storage
+        function loadData() {
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            customers.forEach(customer => {
+                displayCustomerData(customer.name, customer.phone);
+            });
+        }
+
+        // Fungsi untuk menampilkan data customer
+        function displayCustomerData(name, phone) {
+            const whatsappLink = `https://wa.me/${phone}`;
+            resultDiv.innerHTML += `<p><strong>Nama:</strong> ${name} <br><strong>No Handphone:</strong> <a class="whatsapp-link" href="${whatsappLink}" target="_blank">${phone}</a></p>`;
+        }
+
+        // Memuat data dari local storage saat halaman pertama kali dimuat
+        window.onload = loadData;
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            let phone = document.getElementById('phone').value;
+
+            // Hilangkan karakter selain angka (untuk memastikan nomor valid)
+            phone = phone.replace(/\D/g, '');
+
+            // Simpan data ke Local Storage
+            saveData(name, phone);
+
+            // Tampilkan rekapan input
+            displayCustomerData(name, phone);
+
+            // Kosongkan input form setelah submit
+            form.reset();
+
+            // Tampilkan pesan untuk bergabung di grup WhatsApp
+            groupInvitationDiv.style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
